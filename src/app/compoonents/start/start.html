@@ -1,0 +1,15 @@
+<div class="w-4xl text-center mx-auto mt-10">
+    <h1 class="text-3xl font-bold mb-4">Welcome to Paper Soccer!</h1>
+    <div class="mt-16 flex justify-center flex-col items-center">
+        <input
+            id="username"
+            type="text"
+            class="border border-gray-300 rounded-md p-3 w-64"
+            placeholder="Enter your name"
+            [formControl]="username"
+        />
+        <button (click)="enter()" class="bg-blue-500 text-white rounded-md p-3 m-4 cursor-pointer">
+            Let's go
+        </button>
+    </div>
+</div>
