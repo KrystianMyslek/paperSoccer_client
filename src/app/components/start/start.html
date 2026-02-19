@@ -1,6 +1,12 @@
 <div class="w-4xl text-center mx-auto mt-10">
     <h1 class="text-3xl font-bold mb-4">Welcome to Paper Soccer!</h1>
     <div class="mt-16 flex justify-center flex-col items-center">
+        @if (username.hasError('required') && username.touched) {
+            <p class="text-red-500 text-sm">Name is required</p>
+        }
+        @if (username.hasError('minlength') && username.touched) {
+            <p class="text-red-500 text-sm">Name must be at least 4 characters</p>
+        }
         <input
             id="username"
             type="text"

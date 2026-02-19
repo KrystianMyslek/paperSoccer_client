@@ -1,0 +1,17 @@
+<div class="flex flex-row justify-between items-center border px-8 py-6 rounded-xl mb-4 w-3xl">
+    <div class="flex flex-row grow">
+        <div class="flex grow flex-col">
+            <p class="text-2xl font-bold">{{ lobby().name }}</p>
+            <p class="text-lg">Opponent: {{ lobby().owner }}</p>
+        </div>
+        <div class="flex items-center justify-center grow">
+            <p>Size: {{ lobby().size.x }} x {{ lobby().size.y }}</p>
+        </div>
+    </div>
+    <button
+        class="bg-blue-500 text-white px-8 py-2 rounded hover:bg-blue-600"
+        (click)="joinLobby()"
+    >
+        Join
+    </button>
+</div>

@@ -1,0 +1,41 @@
+<div class="flex flex-row justify-between items-center border px-8 py-6 rounded-xl mb-4 w-3xl">
+    <div class="flex flex-row grow">
+        <div class="flex grow flex-col items-start">
+            @if (lobbyName.hasError('required') && lobbyName.touched) {
+                <p class="text-red-500 text-sm">Name is required</p>
+            }
+            @if (lobbyName.hasError('minlength') && lobbyName.touched) {
+                <p class="text-red-500 text-sm">Name must be at least 4 characters</p>
+            }
+            <input class="w-10/12 border p-2" placeholder="Lobby Name" [formControl]="lobbyName" />
+        </div>
+        <div class="flex items-center justify-center grow">
+            <input
+                class="w-12 border p-2 pr-0 mr-2"
+                type="number"
+                step="2"
+                min="4"
+                max="8"
+                onkeydown="return false;"
+                [formControl]="lobbySizeX"
+            />
+            <p class="text-lg">x</p>
+            <input
+                class="w-12 border p-2 pr-0 ml-2"
+                type="number"
+                step="2"
+                min="6"
+                max="14"
+                onkeydown="return false;"
+                [formControl]="lobbySizeY"
+            />
+        </div>
+    </div>
+
+    <button
+        class="bg-blue-500 text-white px-8 py-2 rounded hover:bg-blue-600"
+        (click)="createLobby()"
+    >
+        Create
+    </button>
+</div>

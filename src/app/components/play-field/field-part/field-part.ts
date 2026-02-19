@@ -1,9 +1,9 @@
-import colors from '../../colors';
+import colors from '../../../colors';
 import { CommonModule } from '@angular/common';
 import { Component, input, signal } from '@angular/core';
 import { v4 as uuidv4 } from 'uuid';
-import { player } from '../../types';
-import { GlobalStore } from '../../services/globals';
+import { fieldPlayer } from '../../../types';
+import { GlobalStore } from '../../../services/globals';
 
 @Component({
     selector: 'app-field-part',
@@ -15,10 +15,10 @@ export class FieldPart {
     constructor(private globalStore: GlobalStore) {}
 
     colors = colors;
-    thisPlayer = player.empty;
+    thisPlayer = fieldPlayer.empty;
 
-    l_cross = input([[] as player[]] as player[][]);
-    r_cross = input([[] as player[]] as player[][]);
+    l_cross = input([[] as fieldPlayer[]] as fieldPlayer[][]);
+    r_cross = input([[] as fieldPlayer[]] as fieldPlayer[][]);
     ri = input(0 as number);
     ci = input(0 as number);
 
@@ -49,9 +49,9 @@ export class FieldPart {
     }
 
     getLClass() {
-        if (this.isPlayer('L', player.A)) {
+        if (this.isPlayer('L', fieldPlayer.A)) {
             return `h-[110%] ${this.colors.playerA}`;
-        } else if (this.isPlayer('L', player.B)) {
+        } else if (this.isPlayer('L', fieldPlayer.B)) {
             return `h-[110%] ${this.colors.playerB}`;
         } else if (this.isLPlayable()) {
             return ` cursor-pointer hover:${this.colors.playable}`;
@@ -61,9 +61,9 @@ export class FieldPart {
     }
 
     getRClass() {
-        if (this.isPlayer('R', player.A)) {
+        if (this.isPlayer('R', fieldPlayer.A)) {
             return `h-[110%] ${this.colors.playerA}`;
-        } else if (this.isPlayer('R', player.B)) {
+        } else if (this.isPlayer('R', fieldPlayer.B)) {
             return `h-[110%] ${this.colors.playerB}`;
         } else if (this.isRPlayable()) {
             return `cursor-pointer hover:${this.colors.playable}`;
@@ -72,7 +72,7 @@ export class FieldPart {
         }
     }
 
-    isPlayer(type: string, player: player) {
+    isPlayer(type: string, player: fieldPlayer) {
         switch (type) {
             case 'L':
                 return this.l_cross()[this.ri()][this.ci()] === player;
@@ -82,14 +82,6 @@ export class FieldPart {
                 return false;
         }
     }
-
-    // isLActive() {
-    //     return this.l_cross()[this.ri()][this.ci()];
-    // }
-
-    // isRActive() {
-    //     return this.r_cross()[this.ri()][this.ci()];
-    // }
 
     isLPlayable() {
         return true;

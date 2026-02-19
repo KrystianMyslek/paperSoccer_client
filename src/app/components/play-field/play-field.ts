@@ -1,9 +1,9 @@
 import { Component, input, signal } from '@angular/core';
-import { FieldPart } from './../field-part/field-part';
-import { FieldHLine } from '../field-h-line/field-h-line';
-import { FieldVLine } from '../field-v-line/field-v-line';
-import { FieldDot } from '../field-dot/field-dot';
-import { player, pos } from '../../types';
+import { FieldPart } from './field-part/field-part';
+import { FieldHLine } from './field-h-line/field-h-line';
+import { FieldVLine } from './field-v-line/field-v-line';
+import { FieldDot } from './field-dot/field-dot';
+import { fieldPlayer, size } from '../../types';
 
 @Component({
     selector: 'app-play-field',
@@ -12,18 +12,18 @@ import { player, pos } from '../../types';
     styleUrl: './play-field.css',
 })
 export class PlayField {
-    fieldSize = input<pos>({ x: 4, y: 8 });
+    fieldSize = input<size>({ x: 4, y: 8 });
 
     rows: number[] = [];
     cols: number[] = [];
 
-    active = signal<pos>({ x: 0, y: 0 });
-    mid: pos = { x: 0, y: 0 };
+    active = signal<size>({ x: 0, y: 0 });
+    mid: size = { x: 0, y: 0 };
 
-    v_lines = signal<player[][]>([]);
-    h_lines = signal<player[][]>([]);
-    l_cross = signal<player[][]>([]);
-    r_cross = signal<player[][]>([]);
+    v_lines = signal<fieldPlayer[][]>([]);
+    h_lines = signal<fieldPlayer[][]>([]);
+    l_cross = signal<fieldPlayer[][]>([]);
+    r_cross = signal<fieldPlayer[][]>([]);
     goals: { [key: string]: number[][] } = {
         A: [],
         B: [],
@@ -45,26 +45,26 @@ export class PlayField {
 
         this.v_lines.set(
             Array(this.fieldSize().x)
-                .fill(player.empty)
-                .map(() => Array(this.fieldSize().y).fill(player.empty)),
+                .fill(fieldPlayer.empty)
+                .map(() => Array(this.fieldSize().y).fill(fieldPlayer.empty)),
         );
 
         this.h_lines.set(
             Array(this.fieldSize().x)
-                .fill(player.empty)
-                .map(() => Array(this.fieldSize().y).fill(player.empty)),
+                .fill(fieldPlayer.empty)
+                .map(() => Array(this.fieldSize().y).fill(fieldPlayer.empty)),
         );
 
         this.l_cross.set(
             Array(this.fieldSize().x)
-                .fill(player.empty)
-                .map(() => Array(this.fieldSize().y).fill(player.empty)),
+                .fill(fieldPlayer.empty)
+                .map(() => Array(this.fieldSize().y).fill(fieldPlayer.empty)),
         );
 
         this.r_cross.set(
             Array(this.fieldSize().x)
-                .fill(player.empty)
-                .map(() => Array(this.fieldSize().y).fill(player.empty)),
+                .fill(fieldPlayer.empty)
+                .map(() => Array(this.fieldSize().y).fill(fieldPlayer.empty)),
         );
 
         this.goals = {

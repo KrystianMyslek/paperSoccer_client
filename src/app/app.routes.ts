@@ -11,4 +11,8 @@ export const routes: Routes = [
         loadComponent: () =>
             import('./components/waiting-room/waiting-room').then((m) => m.WaitingRoom),
     },
+    {
+        path: 'lobby/:id',
+        loadComponent: () => import('./components/lobby/lobby').then((m) => m.Lobby),
+    },
 ];

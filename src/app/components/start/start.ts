@@ -11,7 +11,10 @@ import { GlobalStore } from '../../services/globals';
     styleUrl: './start.css',
 })
 export class Start {
-    username = new FormControl('', [Validators.required, Validators.minLength(4)]);
+    username = new FormControl('', {
+        nonNullable: true,
+        validators: [Validators.required, Validators.minLength(3)],
+    });
 
     constructor(
         private wsService: WebSocketService,
@@ -21,15 +24,25 @@ export class Start {
 
     ngOnInit() {
         this.wsService.getMessages().subscribe({
-            next: (msg) => {},
+            next: (msg) => {
+                switch (msg.type) {
+                    case 'waiting_room_entered':
+                        this.globalStore.setId(msg.payload.player_id);
+                        this.globalStore.setUsername(this.username.value);
+                        this.router.navigateByUrl('/waiting-room');
+                        break;
+                }
+            },
         });
     }
 
     enter() {
-        this.globalStore.setUsername(this.username.value || '');
-        this.wsService.sendMessage('enterWaitingRoom', {
-            username: this.username.value,
-        });
-        this.router.navigateByUrl('/waiting-room');
+        if (this.username.valid) {
+            this.wsService.sendMessage('enterWaitingRoom', {
+                username: this.username.value,
+            });
+        } else {
+            this.username.markAsTouched();
+        }
     }
 }

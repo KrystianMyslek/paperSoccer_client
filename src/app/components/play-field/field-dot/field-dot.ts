@@ -1,5 +1,5 @@
-import colors from '../../colors';
-import { pos } from '../../types';
+import colors from '../../../colors';
+import { size } from '../../../types';
 import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
 })
 export class FieldDot {
     colors = colors;
-    active = input({ x: 1, y: 1 } as pos);
+    active = input({ x: 1, y: 1 } as size);
     playable = input(true as boolean);
     goals = input({
         A: [],
@@ -19,10 +19,6 @@ export class FieldDot {
     } as { [key: string]: number[][] });
     ri = input(0 as number);
     ci = input(0 as number);
-
-    // ngOnInit() {
-    //     console.log(colors);
-    // }
 
     getClass() {
         if (this.isActive()) {

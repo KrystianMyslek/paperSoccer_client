@@ -1,4 +1,14 @@
-<div class="text-2xl text-center">
-    <p>Welcome, {{ globalStore.getUsername() }}</p>
-    <p>Find a game to join or create a new one.</p>
+<div class="text-center">
+    <div class="text-2xl">
+        <p>Welcome, {{ globalStore.getUsername() }}</p>
+        <p>Find a game to join or create a new one.</p>
+    </div>
+
+    <div class="flex flex-col justify-between items-center mt-8">
+        <app-new-lobby></app-new-lobby>
+
+        @for (lobby of lobbies(); track $index) {
+            <app-lobby [lobby]="lobby"></app-lobby>
+        }
+    </div>
 </div>
