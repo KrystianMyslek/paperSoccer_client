@@ -1,0 +1,110 @@
+@for (i of rows; track $index; let row_first = $first; let row_last = $last; let rindex = $index) {
+    <div class="flex flex-row justify-center items-center">
+        @for (k of cols; track $index) {
+            <div class="flex flex-row">
+                @if (row_first) {
+                    @if ($first) {
+                        <app-field-dot
+                            [playable]="false"
+                            [active]="active()"
+                            [ri]="rindex"
+                            [ci]="$index"
+                        ></app-field-dot>
+                    }
+                    <app-field-v-line
+                        [border]="true"
+                        [ri]="rindex"
+                        [ci]="$index"
+                    ></app-field-v-line>
+                    <app-field-dot
+                        [playable]="!$last"
+                        [active]="active()"
+                        [ri]="rindex"
+                        [ci]="$index + 1"
+                    ></app-field-dot>
+                } @else {
+                    <app-field-dot
+                        [active]="active()"
+                        [goals]="goals"
+                        [ri]="rindex"
+                        [ci]="$index"
+                    ></app-field-dot>
+                    @if ($first) {
+                        <app-field-v-line
+                            [v_lines]="v_lines()"
+                            [ri]="rindex"
+                            [ci]="$index"
+                        ></app-field-v-line>
+                    } @else {
+                        <app-field-v-line
+                            [v_lines]="v_lines()"
+                            [ri]="rindex"
+                            [ci]="$index"
+                        ></app-field-v-line>
+                    }
+
+                    @if ($last) {
+                        <app-field-dot
+                            [active]="active()"
+                            [goals]="goals"
+                            [ri]="rindex"
+                            [ci]="$index + 1"
+                        ></app-field-dot>
+                    }
+                }
+            </div>
+        }
+    </div>
+    <div class="flex flex-row justify-center items-center">
+        @for (k of cols; track $index) {
+            <div class="flex flex-row">
+                @if ($first) {
+                    <app-field-h-line [border]="true"></app-field-h-line>
+                } @else {
+                    <app-field-h-line
+                        [border]="$index == mid.y ? true : false"
+                        [h_lines]="h_lines()"
+                        [ri]="rindex"
+                        [ci]="$index"
+                    ></app-field-h-line>
+                }
+
+                <app-field-part
+                    [r_cross]="r_cross()"
+                    [l_cross]="l_cross()"
+                    [ri]="rindex"
+                    [ci]="$index"
+                ></app-field-part>
+
+                @if ($last) {
+                    <app-field-h-line [border]="true"></app-field-h-line>
+                }
+            </div>
+        }
+    </div>
+    @if (row_last) {
+        <div class="flex flex-row justify-center items-center">
+            @for (k of cols; track $index) {
+                <div class="flex flex-row">
+                    @if ($first || $last) {
+                        <app-field-dot
+                            [playable]="false"
+                            [active]="active()"
+                            [ri]="rindex"
+                            [ci]="$index"
+                        ></app-field-dot>
+                    }
+                    <app-field-v-line [border]="true"></app-field-v-line>
+                    @if (!$last) {
+                        <app-field-dot
+                            [active]="active()"
+                            [goals]="goals"
+                            [ri]="rindex + 1"
+                            [ci]="$index + 1"
+                        ></app-field-dot>
+                    }
+                </div>
+            }
+        </div>
+    }
+}

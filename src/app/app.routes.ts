@@ -4,11 +4,11 @@ export const routes: Routes = [
     {
         path: '',
         pathMatch: 'full',
-        loadComponent: () => import('./compoonents/start/start').then((m) => m.Start),
+        loadComponent: () => import('./components/start/start').then((m) => m.Start),
     },
     {
         path: 'waiting-room',
         loadComponent: () =>
-            import('./compoonents/waitingRoom/waitingRoom').then((m) => m.WaitingRoom),
+            import('./components/waiting-room/waiting-room').then((m) => m.WaitingRoom),
     },
 ];

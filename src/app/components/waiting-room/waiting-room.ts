@@ -6,8 +6,8 @@ import { GlobalStore } from '../../services/globals';
 @Component({
     selector: 'app-waiting-room',
     imports: [],
-    templateUrl: './waitingRoom.html',
-    styleUrl: './waitingRoom.css',
+    templateUrl: './waiting-room.html',
+    styleUrl: './waiting-room.css',
 })
 export class WaitingRoom {
     constructor(

@@ -1,0 +1,12 @@
+<div class="relative flex items-center justify-center w-32 h-32">
+    <div
+        [id]="lId()"
+        [class]="getLClass() + ' absolute inset-0 m-auto w-2 rotate-45 rounded-full'"
+        (click)="move('L')"
+    ></div>
+    <div
+        [id]="rId()"
+        [class]="getRClass() + ' absolute inset-0 m-auto w-2 -rotate-45 rounded-full'"
+        (click)="move('R')"
+    ></div>
+</div>
