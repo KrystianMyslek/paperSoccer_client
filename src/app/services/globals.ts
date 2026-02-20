@@ -1,32 +1,14 @@
 import { Injectable } from '@angular/core';
-import { fieldPlayer, lobby } from '../types';
+import { lobby, player } from '../types';
 
 @Injectable({
     providedIn: 'root',
 })
 export class GlobalStore {
-    private id: string = '';
-    private username: string = '';
-    private player: fieldPlayer = fieldPlayer.empty;
-    private lobby: lobby = <lobby>{};
+    private player: player = {} as player;
+    private lobby: lobby = {} as lobby;
 
-    getId() {
-        return this.id;
-    }
-
-    setId(id: string) {
-        this.id = id;
-    }
-
-    getUsername() {
-        return this.username;
-    }
-
-    setUsername(name: string) {
-        this.username = name;
-    }
-
-    setPlayer(player: fieldPlayer) {
+    setPlayer(player: player) {
         this.player = player;
     }
 
@@ -36,10 +18,6 @@ export class GlobalStore {
 
     setLobby(lobby: lobby) {
         this.lobby = lobby;
-    }
-
-    setLobbyId(lobbyId: string) {
-        this.lobby.id = lobbyId;
     }
 
     getLobby() {

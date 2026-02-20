@@ -2,7 +2,7 @@ import colors from '../../../colors';
 import { CommonModule } from '@angular/common';
 import { Component, input, signal } from '@angular/core';
 import { v4 as uuidv4 } from 'uuid';
-import { fieldPlayer } from '../../../types';
+import { fieldPlayer, player } from '../../../types';
 import { GlobalStore } from '../../../services/globals';
 
 @Component({
@@ -15,7 +15,7 @@ export class FieldPart {
     constructor(private globalStore: GlobalStore) {}
 
     colors = colors;
-    thisPlayer = fieldPlayer.empty;
+    thisPlayer: player = {} as player;
 
     l_cross = input([[] as fieldPlayer[]] as fieldPlayer[][]);
     r_cross = input([[] as fieldPlayer[]] as fieldPlayer[][]);
@@ -34,9 +34,9 @@ export class FieldPart {
 
     move(type: string) {
         if (type === 'L') {
-            this.l_cross()[this.ri()][this.ci()] = this.thisPlayer;
+            this.l_cross()[this.ri()][this.ci()] = this.thisPlayer.type;
         } else if (type === 'R') {
-            this.r_cross()[this.ri()][this.ci()] = this.thisPlayer;
+            this.r_cross()[this.ri()][this.ci()] = this.thisPlayer.type;
         }
     }
 

@@ -7,7 +7,8 @@ import { environment } from '../../environments/environment';
     providedIn: 'root',
 })
 export class WebSocketService {
-    private client_id: string = '';
+    private player_id: string = '';
+    private phantom_player_id: string | null = localStorage.getItem('player_id');
     private server_url = environment.serverURL || 'ws://localhost:8080';
     private socket$: WebSocketSubject<any>;
 
@@ -17,7 +18,11 @@ export class WebSocketService {
         this.socket$.subscribe({
             next: (msg) => {
                 if (msg.type == 'open' && msg.payload && msg.payload.id) {
-                    this.client_id = msg.payload.id;
+                    this.player_id = msg.payload.id;
+
+                    setTimeout(() => {
+                        localStorage.setItem('player_id', this.player_id);
+                    }, 1000);
                 }
             },
         });
@@ -27,9 +32,14 @@ export class WebSocketService {
         return this.socket$.asObservable();
     }
 
-    sendMessage(action: string, payload?: any) {
-        payload = { id: this.client_id, ...payload };
-        this.socket$.next({ action, payload });
+    sendMessage(controller: string, action: string, payload?: any) {
+        payload = { id: this.player_id, ...payload };
+        this.socket$.next({ controller, action, payload });
+    }
+
+    sendPhantomMessage(controller: string, action: string, payload?: any) {
+        payload = { id: this.phantom_player_id, ...payload };
+        this.socket$.next({ controller, action, payload });
     }
 
     closeConnection() {

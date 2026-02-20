@@ -13,9 +13,5 @@ export class App {
 
     constructor(private wsService: WebSocketService) {}
 
-    ngOnInit() {
-        this.wsService.getMessages().subscribe({
-            next: (msg) => {},
-        });
-    }
+    ngOnInit() {}
 }

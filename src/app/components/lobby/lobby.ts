@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { lobby } from './../../types';
+import { Component, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { GlobalStore } from '../../services/globals';
 import { WebSocketService } from '../../services/websocket';
@@ -16,9 +17,31 @@ export class Lobby {
         private router: Router,
     ) {}
 
+    lobby = signal({} as lobby);
+
     ngOnInit() {
-        if (this.globalStore.getUsername() == '' || this.globalStore.getLobby().id == undefined) {
+        this.lobby.set(this.globalStore.getLobby());
+
+        if (
+            this.globalStore.getPlayer().id == undefined ||
+            this.globalStore.getLobby().id == undefined
+        ) {
             this.router.navigateByUrl('/');
         }
+
+        this.wsService.getMessages().subscribe({
+            next: (msg) => {
+                switch (msg.type) {
+                    case 'lobby_entered':
+                        this.globalStore.setLobby(msg.payload.lobby);
+                        this.lobby.set(msg.payload.lobby);
+                        break;
+                }
+            },
+        });
+    }
+
+    ngOnDestroy() {
+        this.wsService.sendPhantomMessage('setup', 'destroyLobby');
     }
 }

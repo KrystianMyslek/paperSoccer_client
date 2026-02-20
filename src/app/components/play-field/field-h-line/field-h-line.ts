@@ -2,7 +2,7 @@ import colors from '../../../colors';
 import { CommonModule } from '@angular/common';
 import { Component, input, signal } from '@angular/core';
 import { v4 as uuidv4 } from 'uuid';
-import { fieldPlayer } from '../../../types';
+import { fieldPlayer, player } from '../../../types';
 import { GlobalStore } from '../../../services/globals';
 
 @Component({
@@ -15,7 +15,7 @@ export class FieldHLine {
     constructor(private globalStore: GlobalStore) {}
 
     colors = colors;
-    thisPlayer = fieldPlayer.empty;
+    thisPlayer: player = {} as player;
     h_lines = input([[] as fieldPlayer[]] as fieldPlayer[][]);
     border = input(false as boolean);
     ri = input(0 as number);
@@ -29,7 +29,7 @@ export class FieldHLine {
     }
 
     move() {
-        this.h_lines()[this.ri()][this.ci()] = this.thisPlayer;
+        this.h_lines()[this.ri()][this.ci()] = this.thisPlayer.type;
     }
 
     getId() {

@@ -9,9 +9,16 @@ export type size = {
     y: number;
 };
 
-export type lobby = {
-    id?: string;
+export type player = {
+    id: string;
     name: string;
-    owner: string;
+    type: fieldPlayer;
+};
+
+export type lobby = {
+    id: string;
+    name: string;
+    owner: player;
+    opponent?: player;
     size: size;
 };

@@ -23,21 +23,31 @@ export class WaitingRoom {
     lobbies = signal<lobby[]>([]);
 
     ngOnInit() {
-        if (this.globalStore.getUsername() == '') {
+        if (this.globalStore.getPlayer().id == undefined) {
             this.router.navigateByUrl('/');
         }
+
+        this.wsService.sendMessage('setup', 'getLobbiesList');
 
         this.wsService.getMessages().subscribe({
             next: (msg) => {
                 switch (msg.type) {
-                    case 'waiting_room_entered':
+                    case 'lobbies_list':
+                        this.lobbies.set(msg.payload.lobbies);
                         break;
                     case 'lobby_created':
-                        this.globalStore.setLobbyId(msg.payload.lobby_id);
-                        this.router.navigateByUrl('/lobby/' + msg.payload.lobby_id);
+                        this.globalStore.setLobby(msg.payload.lobby);
+                        this.router.navigateByUrl('/lobby/' + msg.payload.lobby.id);
+                        break;
+                    case 'lobby_joined':
+                        this.globalStore.setLobby(msg.payload.lobby);
+                        this.router.navigateByUrl('/lobby/' + msg.payload.lobby.id);
                         break;
                     case 'new_lobby':
-                        this.addLobby(msg.payload);
+                        this.addLobby(msg.payload.lobby);
+                        break;
+                    case 'lobby_destroyed':
+                        this.removeLobby(msg.payload.lobby_id);
                         break;
                 }
             },
@@ -46,5 +56,9 @@ export class WaitingRoom {
 
     addLobby(lobby: lobby) {
         this.lobbies.set([...this.lobbies(), lobby]);
+    }
+
+    removeLobby(lobby_id: string) {
+        this.lobbies.set(this.lobbies().filter((l) => l.id != lobby_id));
     }
 }

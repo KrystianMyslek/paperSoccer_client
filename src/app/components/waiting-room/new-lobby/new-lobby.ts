@@ -27,14 +27,13 @@ export class NewLobby {
 
     createLobby() {
         if (this.lobbyName.valid) {
-            const lobby: lobby = {
+            const lobby = {
                 name: this.lobbyName.value,
-                owner: this.globalStore.getUsername(),
+                owner: this.globalStore.getPlayer().name,
                 size: { x: this.lobbySizeX.value, y: this.lobbySizeY.value },
             };
 
-            this.wsService.sendMessage('newLobby', lobby);
-            this.globalStore.setLobby(lobby);
+            this.wsService.sendMessage('setup', 'newLobby', lobby);
         } else {
             this.lobbyName.markAsTouched();
         }

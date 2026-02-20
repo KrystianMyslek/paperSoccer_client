@@ -3,6 +3,7 @@ import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { WebSocketService } from '../../services/websocket';
 import { Router } from '@angular/router';
 import { GlobalStore } from '../../services/globals';
+import { player } from '../../types';
 
 @Component({
     selector: 'app-start',
@@ -27,8 +28,12 @@ export class Start {
             next: (msg) => {
                 switch (msg.type) {
                     case 'waiting_room_entered':
-                        this.globalStore.setId(msg.payload.player_id);
-                        this.globalStore.setUsername(this.username.value);
+                        const player = {
+                            id: msg.payload.player_id,
+                            name: this.username.value,
+                        } as player;
+
+                        this.globalStore.setPlayer(player);
                         this.router.navigateByUrl('/waiting-room');
                         break;
                 }
@@ -38,7 +43,7 @@ export class Start {
 
     enter() {
         if (this.username.valid) {
-            this.wsService.sendMessage('enterWaitingRoom', {
+            this.wsService.sendMessage('setup', 'enterWaitingRoom', {
                 username: this.username.value,
             });
         } else {
