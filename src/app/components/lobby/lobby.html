@@ -1,5 +1,42 @@
-<div class="text-center">
-    <div class="text-2xl">
-        <p>Game Lobby</p>
+<div class="max-w-3xl mx-auto mt-10">
+    <div class="text-center mb-6">
+        <p class="text-3xl font-bold pb-3">Game Lobby</p>
+        <hr />
+        <p class="text-2xl pt-3">{{ lobby().name }}</p>
+    </div>
+
+    <div class="flex justify-center space-x-8">
+        <div
+            class="w-full border rounded-xl p-6 text-center"
+            [class]="isOwner ? 'border-blue-500' : ''"
+        >
+            <p class="text-xl font-semibold">{{ ownerName }}</p>
+        </div>
+        <div class="text-xl flex items-center">vs</div>
+        <div
+            class="w-full border rounded-xl p-6 text-center"
+            [class]="!isOwner ? 'border-blue-500' : ''"
+        >
+            <p class="text-xl font-semibold">{{ opponentName }}</p>
+        </div>
+    </div>
+
+    <div class="mt-6 flex justify-center space-x-4">
+        @if (canStartGame) {
+            <button
+                class="bg-blue-600 text-white px-8 py-2 w-34 rounded-lg cursor-pointer hover:bg-blue-700"
+                (click)="startGame()"
+            >
+                Start
+            </button>
+        }
+        @if (isOwner) {
+            <button
+                class="bg-red-600 text-white px-8 py-2 w-34 rounded-lg cursor-pointer hover:bg-red-700"
+                (click)="cancelGame()"
+            >
+                Cancel
+            </button>
+        }
     </div>
 </div>

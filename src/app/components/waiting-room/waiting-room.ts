@@ -37,11 +37,11 @@ export class WaitingRoom {
                         break;
                     case 'lobby_created':
                         this.globalStore.setLobby(msg.payload.lobby);
-                        this.router.navigateByUrl('/lobby/' + msg.payload.lobby.id);
+                        this.router.navigateByUrl('/lobby');
                         break;
                     case 'lobby_joined':
                         this.globalStore.setLobby(msg.payload.lobby);
-                        this.router.navigateByUrl('/lobby/' + msg.payload.lobby.id);
+                        this.router.navigateByUrl('/lobby');
                         break;
                     case 'new_lobby':
                         this.addLobby(msg.payload.lobby);

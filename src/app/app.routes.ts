@@ -12,7 +12,11 @@ export const routes: Routes = [
             import('./components/waiting-room/waiting-room').then((m) => m.WaitingRoom),
     },
     {
-        path: 'lobby/:id',
+        path: 'lobby',
         loadComponent: () => import('./components/lobby/lobby').then((m) => m.Lobby),
+    },
+    {
+        path: 'game',
+        loadComponent: () => import('./components/game/game').then((m) => m.Game),
     },
 ];

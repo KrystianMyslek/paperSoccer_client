@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { Router } from '@angular/router';
 
 @Injectable({
     providedIn: 'root',
@@ -11,8 +12,10 @@ export class WebSocketService {
     private phantom_player_id: string | null = localStorage.getItem('player_id');
     private server_url = environment.serverURL || 'ws://localhost:8080';
     private socket$: WebSocketSubject<any>;
+    private router: Router;
 
-    constructor() {
+    constructor(router: Router) {
+        this.router = router;
         this.socket$ = webSocket(this.server_url);
 
         this.socket$.subscribe({
@@ -25,6 +28,7 @@ export class WebSocketService {
                     }, 1000);
                 }
             },
+            error: (err) => this.router.navigateByUrl('/'),
         });
     }
 

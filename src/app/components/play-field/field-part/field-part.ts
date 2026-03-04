@@ -17,8 +17,10 @@ export class FieldPart {
     colors = colors;
     thisPlayer: player = {} as player;
 
-    l_cross = input([[] as fieldPlayer[]] as fieldPlayer[][]);
-    r_cross = input([[] as fieldPlayer[]] as fieldPlayer[][]);
+    l_cross = input([[]] as fieldPlayer[][]);
+    available_l_cross = input([[]] as boolean[][]);
+    r_cross = input([[]] as fieldPlayer[][]);
+    available_r_cross = input([[]] as boolean[][]);
     ri = input(0 as number);
     ci = input(0 as number);
 

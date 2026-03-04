@@ -29,7 +29,6 @@ export class NewLobby {
         if (this.lobbyName.valid) {
             const lobby = {
                 name: this.lobbyName.value,
-                owner: this.globalStore.getPlayer().name,
                 size: { x: this.lobbySizeX.value, y: this.lobbySizeY.value },
             };
 

@@ -22,3 +22,11 @@ export type lobby = {
     opponent?: player;
     size: size;
 };
+
+export type game = {
+    id: string;
+    name: string;
+    size: size;
+    player_A_id: string;
+    player_B_id: string;
+};

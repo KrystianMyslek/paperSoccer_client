@@ -16,7 +16,8 @@ export class FieldHLine {
 
     colors = colors;
     thisPlayer: player = {} as player;
-    h_lines = input([[] as fieldPlayer[]] as fieldPlayer[][]);
+    h_lines = input([[]] as fieldPlayer[][]);
+    available_h_lines = input([[]] as boolean[][]);
     border = input(false as boolean);
     ri = input(0 as number);
     ci = input(0 as number);
@@ -44,9 +45,9 @@ export class FieldHLine {
         } else if (this.isPlayer(fieldPlayer.B)) {
             return `h-26 rounded-full ${this.colors.playerB}`;
         } else if (this.isPlayable()) {
-            return `h-24 rounded-full cursor-pointer hover:${this.colors.playable}`;
+            return `h-24 rounded-full cursor-pointer ${this.colors.playable} hover:${this.colors.playablehover}`;
         } else {
-            return `h-24 rounded-full ${this.colors.border}`;
+            return ``;
         }
     }
 
@@ -59,6 +60,12 @@ export class FieldHLine {
     }
 
     isPlayable() {
-        return this.isBorder() ? false : true;
+        if (this.isBorder()) {
+            return false;
+        }
+
+        return (
+            this.available_h_lines()[this.ri()] && this.available_h_lines()[this.ri()][this.ci()]
+        );
     }
 }

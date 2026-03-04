@@ -4,6 +4,7 @@ import { Component, input, signal } from '@angular/core';
 import { v4 as uuidv4 } from 'uuid';
 import { fieldPlayer, player } from '../../../types';
 import { GlobalStore } from '../../../services/globals';
+import console from 'node:console';
 
 @Component({
     selector: 'app-field-v-line',
@@ -16,7 +17,8 @@ export class FieldVLine {
     colors = colors;
 
     thisPlayer: player = {} as player;
-    v_lines = input([[] as fieldPlayer[]] as fieldPlayer[][]);
+    v_lines = input([[]] as fieldPlayer[][]);
+    available_v_lines = input([[]] as fieldPlayer[][]);
     border = input(false as boolean);
     ri = input(0 as number);
     ci = input(0 as number);
@@ -44,9 +46,9 @@ export class FieldVLine {
         } else if (this.isPlayer(fieldPlayer.B)) {
             return `w-26 rounded-full ${this.colors.playerB}`;
         } else if (this.isPlayable()) {
-            return `w-24 rounded-full cursor-pointer hover:${this.colors.playable}`;
+            return `w-24 rounded-full cursor-pointer ${this.colors.playable} hover:${this.colors.playablehover}`;
         } else {
-            return `w-24 rounded-full ${this.colors.border}`;
+            return ``;
         }
     }
 
@@ -59,6 +61,17 @@ export class FieldVLine {
     }
 
     isPlayable() {
-        return this.isBorder() ? false : true;
+        if (this.isBorder()) {
+            return false;
+        }
+
+        // console.log(this.available_v_lines());
+        // console.log(this.available_v_lines()[this.ri()][this.ci()]);
+
+        // console.log('------------------');
+
+        return (
+            this.available_v_lines()[this.ri()] && this.available_v_lines()[this.ri()][this.ci()]
+        );
     }
 }
