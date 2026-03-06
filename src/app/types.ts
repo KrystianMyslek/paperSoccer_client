@@ -9,6 +9,10 @@ export type size = {
     y: number;
 };
 
+export type goal = {
+    [key: string]: number[][];
+};
+
 export type player = {
     id: string;
     name: string;

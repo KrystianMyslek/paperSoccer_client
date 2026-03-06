@@ -1,7 +1,5 @@
-import { lobby } from './../../../types';
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import { GlobalStore } from '../../../services/globals';
 import { WebSocketService } from '../../../services/websocket';
 
@@ -15,7 +13,6 @@ export class NewLobby {
     constructor(
         private wsService: WebSocketService,
         public globalStore: GlobalStore,
-        private router: Router,
     ) {}
 
     lobbyName = new FormControl('', {

@@ -1,6 +1,6 @@
 import colors from '../../../colors';
 import { CommonModule } from '@angular/common';
-import { Component, input, signal } from '@angular/core';
+import { Component, EventEmitter, input, Output, signal } from '@angular/core';
 import { v4 as uuidv4 } from 'uuid';
 import { fieldPlayer, player } from '../../../types';
 import { GlobalStore } from '../../../services/globals';
@@ -14,8 +14,14 @@ import { GlobalStore } from '../../../services/globals';
 export class FieldHLine {
     constructor(private globalStore: GlobalStore) {}
 
+    @Output() moveEmiter = new EventEmitter<{
+        type: string;
+        new_possition: { x: number; y: number };
+    }>();
+
     colors = colors;
-    thisPlayer: player = {} as player;
+
+    myMove = input(false as boolean);
     h_lines = input([[]] as fieldPlayer[][]);
     available_h_lines = input([[]] as boolean[][]);
     border = input(false as boolean);
@@ -26,11 +32,12 @@ export class FieldHLine {
 
     ngOnInit() {
         this.id.set(this.getId());
-        this.thisPlayer = this.globalStore.getPlayer();
     }
 
-    move() {
-        this.h_lines()[this.ri()][this.ci()] = this.thisPlayer.type;
+    moveEmit() {
+        if (!this.isOcupied() && this.isPlayable()) {
+            this.moveEmiter.emit({ type: 'h_line', new_possition: { x: this.ri(), y: this.ci() } });
+        }
     }
 
     getId() {
@@ -59,8 +66,12 @@ export class FieldHLine {
         return this.border() || this.h_lines()[this.ri()][this.ci()] === player;
     }
 
+    isOcupied() {
+        return this.isPlayer(fieldPlayer.A) || this.isPlayer(fieldPlayer.B);
+    }
+
     isPlayable() {
-        if (this.isBorder()) {
+        if (this.isBorder() || !this.myMove()) {
             return false;
         }
 

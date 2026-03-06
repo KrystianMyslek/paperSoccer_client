@@ -1,10 +1,9 @@
 import colors from '../../../colors';
 import { CommonModule } from '@angular/common';
-import { Component, input, signal } from '@angular/core';
+import { Component, EventEmitter, input, Output, signal } from '@angular/core';
 import { v4 as uuidv4 } from 'uuid';
 import { fieldPlayer, player } from '../../../types';
 import { GlobalStore } from '../../../services/globals';
-import console from 'node:console';
 
 @Component({
     selector: 'app-field-v-line',
@@ -14,11 +13,17 @@ import console from 'node:console';
 })
 export class FieldVLine {
     constructor(private globalStore: GlobalStore) {}
+
+    @Output() moveEmiter = new EventEmitter<{
+        type: string;
+        new_possition: { x: number; y: number };
+    }>();
+
     colors = colors;
 
-    thisPlayer: player = {} as player;
+    myMove = input(false as boolean);
     v_lines = input([[]] as fieldPlayer[][]);
-    available_v_lines = input([[]] as fieldPlayer[][]);
+    available_v_lines = input([[]] as boolean[][]);
     border = input(false as boolean);
     ri = input(0 as number);
     ci = input(0 as number);
@@ -27,11 +32,12 @@ export class FieldVLine {
 
     ngOnInit() {
         this.id.set(this.getId());
-        this.thisPlayer = this.globalStore.getPlayer();
     }
 
-    move() {
-        this.v_lines()[this.ri()][this.ci()] = this.thisPlayer.type;
+    moveEmit() {
+        if (!this.isOcupied() && this.isPlayable()) {
+            this.moveEmiter.emit({ type: 'v_line', new_possition: { x: this.ri(), y: this.ci() } });
+        }
     }
 
     getId() {
@@ -60,15 +66,14 @@ export class FieldVLine {
         return this.border() || this.v_lines()[this.ri()][this.ci()] === player;
     }
 
+    isOcupied() {
+        return this.isPlayer(fieldPlayer.A) || this.isPlayer(fieldPlayer.B);
+    }
+
     isPlayable() {
-        if (this.isBorder()) {
+        if (this.isBorder() || !this.myMove()) {
             return false;
         }
-
-        // console.log(this.available_v_lines());
-        // console.log(this.available_v_lines()[this.ri()][this.ci()]);
-
-        // console.log('------------------');
 
         return (
             this.available_v_lines()[this.ri()] && this.available_v_lines()[this.ri()][this.ci()]

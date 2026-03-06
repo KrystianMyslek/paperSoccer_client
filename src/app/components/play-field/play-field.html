@@ -42,6 +42,8 @@
                             <app-field-v-line
                                 [v_lines]="doneMoves().v_lines"
                                 [available_v_lines]="availableMoves().v_lines"
+                                [myMove]="myMove()"
+                                (moveEmiter)="move($event)"
                                 [ri]="rindex"
                                 [ci]="$index"
                             ></app-field-v-line>
@@ -49,6 +51,8 @@
                             <app-field-v-line
                                 [v_lines]="doneMoves().v_lines"
                                 [available_v_lines]="availableMoves().v_lines"
+                                [myMove]="myMove()"
+                                (moveEmiter)="move($event)"
                                 [ri]="rindex"
                                 [ci]="$index"
                             ></app-field-v-line>
@@ -76,6 +80,8 @@
                             [border]="$index == mid.y ? true : false"
                             [h_lines]="doneMoves().h_lines"
                             [available_h_lines]="availableMoves().h_lines"
+                            [myMove]="myMove()"
+                            (moveEmiter)="move($event)"
                             [ri]="rindex"
                             [ci]="$index"
                         ></app-field-h-line>
@@ -86,6 +92,8 @@
                         [available_r_cross]="availableMoves().r_cross"
                         [l_cross]="doneMoves().l_cross"
                         [available_l_cross]="availableMoves().l_cross"
+                        [myMove]="myMove()"
+                        (moveEmiter)="move($event)"
                         [ri]="rindex"
                         [ci]="$index"
                     ></app-field-part>

@@ -1,6 +1,6 @@
 import colors from '../../../colors';
 import { CommonModule } from '@angular/common';
-import { Component, input, signal } from '@angular/core';
+import { Component, EventEmitter, input, Output, signal } from '@angular/core';
 import { v4 as uuidv4 } from 'uuid';
 import { fieldPlayer, player } from '../../../types';
 import { GlobalStore } from '../../../services/globals';
@@ -14,9 +14,14 @@ import { GlobalStore } from '../../../services/globals';
 export class FieldPart {
     constructor(private globalStore: GlobalStore) {}
 
-    colors = colors;
-    thisPlayer: player = {} as player;
+    @Output() moveEmiter = new EventEmitter<{
+        type: string;
+        new_possition: { x: number; y: number };
+    }>();
 
+    colors = colors;
+
+    myMove = input(false as boolean);
     l_cross = input([[]] as fieldPlayer[][]);
     available_l_cross = input([[]] as boolean[][]);
     r_cross = input([[]] as fieldPlayer[][]);
@@ -28,47 +33,48 @@ export class FieldPart {
     rId = signal<string>(uuidv4());
 
     ngOnInit() {
-        this.lId.set(this.getLId());
-        this.rId.set(this.getRId());
-
-        this.thisPlayer = this.globalStore.getPlayer();
+        this.lId.set(this.getId('L'));
+        this.rId.set(this.getId('R'));
     }
 
-    move(type: string) {
-        if (type === 'L') {
-            this.l_cross()[this.ri()][this.ci()] = this.thisPlayer.type;
-        } else if (type === 'R') {
-            this.r_cross()[this.ri()][this.ci()] = this.thisPlayer.type;
+    moveEmit(type: string) {
+        switch (type) {
+            case 'L':
+                if (!this.isOcupied('L') && this.isPlayable('L')) {
+                    this.moveEmiter.emit({
+                        type: 'l_cross',
+                        new_possition: { x: this.ri(), y: this.ci() },
+                    });
+                }
+                break;
+            case 'R':
+                if (!this.isOcupied('R') && this.isPlayable('R')) {
+                    this.moveEmiter.emit({
+                        type: 'r_cross',
+                        new_possition: { x: this.ri(), y: this.ci() },
+                    });
+                }
+                break;
+            default:
+                break;
         }
     }
 
-    getLId() {
-        return this.ri() && this.ci() ? 'l_cross_' + this.ri() + '_' + this.ci() : this.lId();
+    getId(type: string) {
+        return this.ri() && this.ci()
+            ? type.toLowerCase() + '_cross_' + this.ri() + '_' + this.ci()
+            : type === 'L'
+              ? this.lId()
+              : this.rId();
     }
 
-    getRId() {
-        return this.ri() && this.ci() ? 'r_cross_' + this.ri() + '_' + this.ci() : this.rId();
-    }
-
-    getLClass() {
-        if (this.isPlayer('L', fieldPlayer.A)) {
+    getClass(type: string) {
+        if (this.isPlayer(type, fieldPlayer.A)) {
             return `h-[110%] ${this.colors.playerA}`;
-        } else if (this.isPlayer('L', fieldPlayer.B)) {
+        } else if (this.isPlayer(type, fieldPlayer.B)) {
             return `h-[110%] ${this.colors.playerB}`;
-        } else if (this.isLPlayable()) {
-            return ` cursor-pointer hover:${this.colors.playable}`;
-        } else {
-            return '';
-        }
-    }
-
-    getRClass() {
-        if (this.isPlayer('R', fieldPlayer.A)) {
-            return `h-[110%] ${this.colors.playerA}`;
-        } else if (this.isPlayer('R', fieldPlayer.B)) {
-            return `h-[110%] ${this.colors.playerB}`;
-        } else if (this.isRPlayable()) {
-            return `cursor-pointer hover:${this.colors.playable}`;
+        } else if (this.isPlayable(type)) {
+            return `rounded-full cursor-pointer ${this.colors.playable} hover:${this.colors.playablehover}`;
         } else {
             return '';
         }
@@ -85,11 +91,28 @@ export class FieldPart {
         }
     }
 
-    isLPlayable() {
-        return true;
+    isOcupied(type: string) {
+        return this.isPlayer(type, fieldPlayer.A) || this.isPlayer(type, fieldPlayer.B);
     }
 
-    isRPlayable() {
-        return true;
+    isPlayable(type: string) {
+        if (!this.myMove()) {
+            return false;
+        }
+
+        switch (type) {
+            case 'L':
+                return (
+                    this.available_l_cross()[this.ri()] &&
+                    this.available_l_cross()[this.ri()][this.ci()]
+                );
+            case 'R':
+                return (
+                    this.available_r_cross()[this.ri()] &&
+                    this.available_r_cross()[this.ri()][this.ci()]
+                );
+            default:
+                return false;
+        }
     }
 }

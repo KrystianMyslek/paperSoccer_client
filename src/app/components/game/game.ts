@@ -1,3 +1,4 @@
+import { fieldPlayer } from './../../types';
 import { Component, signal } from '@angular/core';
 import { PlayField } from '../play-field/play-field';
 import { Router } from '@angular/router';
@@ -22,14 +23,35 @@ export class Game {
     fieldSize = { x: 0, y: 0 };
 
     ngOnInit() {
-        if (
-            this.globalStore.getPlayer().id == undefined ||
-            this.globalStore.getGame().id == undefined
-        ) {
+        const player = this.globalStore.getPlayer();
+
+        if (player.id == undefined || this.globalStore.getGame().id == undefined) {
             this.router.navigateByUrl('/');
         }
 
         this.game.set(this.globalStore.getGame());
         this.fieldSize = this.game().size;
+
+        if (player.id == this.game().player_A_id) {
+            this.globalStore.setPlayer({ ...player, type: fieldPlayer.A });
+        } else if (player.id == this.game().player_B_id) {
+            this.globalStore.setPlayer({ ...player, type: fieldPlayer.B });
+        }
+
+        this.wsService.getMessages().subscribe({
+            next: (msg) => {
+                switch (msg.type) {
+                    case 'game_destroyed':
+                        this.globalStore.deleteGame();
+                        this.wsService.sendMessage('setup', 'returnToWaitingRoom');
+                        this.router.navigateByUrl('/waiting-room');
+                        break;
+                }
+            },
+        });
+    }
+
+    ngOnDestroy() {
+        this.wsService.sendPhantomMessage('game', 'destroyGame');
     }
 }
