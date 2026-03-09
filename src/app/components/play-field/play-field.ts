@@ -50,7 +50,6 @@ export class PlayField {
     }
 
     move(data: { type: string; new_possition: { x: number; y: number } }) {
-        console.log('move');
         console.log(data);
         this.wsService.sendMessage('game', 'makeMove', {
             game_id: this.globalStore.getGame().id,
@@ -59,10 +58,14 @@ export class PlayField {
         });
     }
 
-    ngOnInit() {
+    getAvailableMoves() {
         this.wsService.sendMessage('game', 'getAvailableMoves', {
             game_id: this.globalStore.getGame().id,
         });
+    }
+
+    ngOnInit() {
+        this.getAvailableMoves();
 
         this.rows = Array(this.fieldSize().x);
         this.cols = Array(this.fieldSize().y);
@@ -115,15 +118,14 @@ export class PlayField {
         this.wsService.getMessages().subscribe({
             next: (msg) => {
                 switch (msg.type) {
-                    case 'done_moves':
-                        this.doneMoves.set(msg.payload.doneMoves);
-                        break;
                     case 'available_moves':
                         this.myMove.set(msg.payload.myMove);
                         this.availableMoves.set(msg.payload.availableMoves);
                         break;
-                    case 'change_active_player':
-                        this.myMove.set(msg.payload.isMyMove);
+                    case 'end_move':
+                        this.doneMoves.set(msg.payload.doneMoves);
+                        this.active.set(msg.payload.active);
+                        this.getAvailableMoves();
                         break;
                 }
             },

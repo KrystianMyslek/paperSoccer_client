@@ -12,8 +12,6 @@ import { GlobalStore } from '../../../services/globals';
     styleUrl: './field-v-line.css',
 })
 export class FieldVLine {
-    constructor(private globalStore: GlobalStore) {}
-
     @Output() moveEmiter = new EventEmitter<{
         type: string;
         new_possition: { x: number; y: number };
@@ -36,12 +34,15 @@ export class FieldVLine {
 
     moveEmit() {
         if (!this.isOcupied() && this.isPlayable()) {
-            this.moveEmiter.emit({ type: 'v_line', new_possition: { x: this.ri(), y: this.ci() } });
+            this.moveEmiter.emit({
+                type: 'v_lines',
+                new_possition: { x: this.ri(), y: this.ci() },
+            });
         }
     }
 
     getId() {
-        return !this.border() ? 'v_line_' + this.ri() + '_' + this.ci() : this.id();
+        return !this.border() ? 'v_lines_' + this.ri() + '_' + this.ci() : this.id();
     }
 
     getClass() {

@@ -12,8 +12,6 @@ import { GlobalStore } from '../../../services/globals';
     styleUrl: './field-h-line.css',
 })
 export class FieldHLine {
-    constructor(private globalStore: GlobalStore) {}
-
     @Output() moveEmiter = new EventEmitter<{
         type: string;
         new_possition: { x: number; y: number };
@@ -36,12 +34,15 @@ export class FieldHLine {
 
     moveEmit() {
         if (!this.isOcupied() && this.isPlayable()) {
-            this.moveEmiter.emit({ type: 'h_line', new_possition: { x: this.ri(), y: this.ci() } });
+            this.moveEmiter.emit({
+                type: 'h_lines',
+                new_possition: { x: this.ri(), y: this.ci() },
+            });
         }
     }
 
     getId() {
-        return !this.border() ? 'h_line_' + this.ri() + '_' + this.ci() : this.id();
+        return !this.border() ? 'h_lines_' + this.ri() + '_' + this.ci() : this.id();
     }
 
     getClass() {

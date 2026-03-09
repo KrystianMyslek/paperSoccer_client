@@ -12,8 +12,6 @@ import { GlobalStore } from '../../../services/globals';
     styleUrl: './field-part.css',
 })
 export class FieldPart {
-    constructor(private globalStore: GlobalStore) {}
-
     @Output() moveEmiter = new EventEmitter<{
         type: string;
         new_possition: { x: number; y: number };
